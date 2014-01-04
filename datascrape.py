@@ -1,7 +1,9 @@
 import csv, re, cStringIO, codecs
 
-from pattern.web import abs, URL, DOM, plaintext, strip_between
-from pattern.web import NODE, TEXT, COMMENT, ELEMENT, DOCUMENT
+#from pattern.web import abs, URL, DOM, plaintext, strip_between
+#from pattern.web import NODE, TEXT, COMMENT, ELEMENT, DOCUMENT
+
+from pattern.web import Wikipedia
 
 #unicode writer
 class UnicodeWriter:
@@ -34,9 +36,29 @@ class UnicodeWriter:
             self.writerow(row)
 
 # Creating the csv output file for writing into as well as defining the writer
-output = open("project2.csv", "wb")
+output = open("congress-data.csv", "wb")
 writer = UnicodeWriter(output)
 
 # add header row
-writer.writerow(["Movie_Title", "Time", "Genre", "Directors", "Writers", "Actors","Metascore", "User_Rating","Number_of_Ratings", "Budget", "Box_Office_US", "Box_Office_World", "MPAA", "Date"])
+writer.writerow(["Name", "Congress", "House/Senate", "State", "Party", "Military", "Military Branch"])
+
+# create Wikipedia search engine
+engine = Wikipedia(license=none, throttle=5.0, language=None)
+
+# for each year (82nd to 113th Congress)
+for i in range(82, 113):
+    congress_article = engine.search(i + ' United States Congress')
+
+    # for each Congressman
+
+    congressman_article = engine.search('John McCain')
+
+    # grab state, party, military info, somewhere in a table
+    for table in congressman_article.tables:
+        if "Military" in table.title:
+            #write military row
+        if "Personal" in table.title:
+            #write party
+        
+
 
