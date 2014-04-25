@@ -43,22 +43,48 @@ writer = UnicodeWriter(output)
 writer.writerow(["Name", "Congress", "House/Senate", "State", "Party", "Military", "Military Branch"])
 
 # create Wikipedia search engine
-engine = Wikipedia(license=none, throttle=5.0, language=None)
+engine = Wikipedia(license=None, throttle=5.0, language=None)
 
 # for each year (82nd to 113th Congress)
 for i in range(82, 113):
-    congress_article = engine.search(i + ' United States Congress')
+    # change from number to ordinal (12 to 12th)
+    k = i%10
+    print "%d%s United States Congress"%(i,"tsnrhtdd"[(i/10%10!=1)*(k<4)*k::4])
+    
+    congress_article = Wikipedia().search("%d%s United States Congress"%(i,"tsnrhtdd"[(i/10%10!=1)*(k<4)*k::4]))
 
+    state_section = False
+    
+    for section in congress_article.sections:
+        # Alabama to Wyoming
+        if "Alabama" in section.title:
+            state_section = True
+        
+        if state_section:
+            print section.source
+            #put in dom parser, loop through <li>, grab title element in <a> within <li>
+            #congressman_article on title
+            
+            #for link in section.links:
+            #    congressman_article = Wikipedia().search(link)
+            #    print article.title
+        
+        if "Wyoming" in section.title:
+            state_section = False
+            break
+        
     # for each Congressman
 
-    congressman_article = engine.search('John McCain')
-
-    # grab state, party, military info, somewhere in a table
-    for table in congressman_article.tables:
-        if "Military" in table.title:
-            #write military row
-        if "Personal" in table.title:
-            #write party
+##    congressman_article = Wikipedia().search('John McCain')
+##
+##    # grab state, party, military info, somewhere in a table
+##    for table in congressman_article.tables:
+##        if "Military" in table.title:
+##            #write military row
+##            print "military"
+##        if "Personal" in table.title:
+##            #write party
+##            print "Republican"
         
 
 
